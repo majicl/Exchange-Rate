@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Domain", "Src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Domain.Test", "Test\ExchangeRate.Domain.Test\ExchangeRate.Domain.Test.csproj", "{9395734A-8603-4290-9FBA-57807E10792C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Application", "Src\ExchangeRate.Application\ExchangeRate.Application.csproj", "{05D8B5DB-EAB3-4394-B34F-E9217F7F905B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{9395734A-8603-4290-9FBA-57807E10792C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9395734A-8603-4290-9FBA-57807E10792C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9395734A-8603-4290-9FBA-57807E10792C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05D8B5DB-EAB3-4394-B34F-E9217F7F905B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05D8B5DB-EAB3-4394-B34F-E9217F7F905B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05D8B5DB-EAB3-4394-B34F-E9217F7F905B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05D8B5DB-EAB3-4394-B34F-E9217F7F905B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
