@@ -7,5 +7,12 @@
   <ItemGroup>
     <Folder Include="Currency\" />
     <Folder Include="Currency\Queries\" />
+    <Folder Include="Errors\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRate.Domain\ExchangeRate.Domain.csproj" />
   </ItemGroup>
 </Project>
