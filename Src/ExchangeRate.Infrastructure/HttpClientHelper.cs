@@ -14,7 +14,7 @@ namespace ExchangeRate.Infrastructure
                 HttpResponseMessage response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 var resp = await response.Content.ReadAsStringAsync();
-                return (T)JsonConvert.DeserializeObject(resp);
+                return JsonConvert.DeserializeObject<T>(resp);
             }
         }
     }
