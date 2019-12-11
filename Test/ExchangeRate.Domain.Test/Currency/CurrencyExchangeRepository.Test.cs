@@ -1,31 +1,47 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using ExchangeRate.Domain.Currency;
-using ExchangeRate.Domain.Test.Currency.Mocks;
-using Moq;
+using ExchangeRate.Infrastructure.Currency;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 
 namespace ExchangeRate.Domain.Test.Currency
 {
-    public class CurrencyExchangeRepository
+    public class CurrencyExchangeRepositoryTest
     {
 
         private ICurrencyExchangeRepository _ICurrencyExchangeRepository;
-        private Mock<ICurrencyExchangeRepository> _ICurrencyExchangeRepositoryMock = new Mock<ICurrencyExchangeRepository>();
 
-        public CurrencyExchangeRepository()
+        private string StubbingExchangeRateAPI()
         {
-            _ICurrencyExchangeRepository = _ICurrencyExchangeRepositoryMock.Object;
+            // Stubbing ExchangeRateAPI.io
+            var server = FluentMockServer.Start();
+            server
+              .Given(Request.Create().WithPath("/history"))
+              .RespondWith(
+                    Response
+                    .Create()
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json")
+                    .WithBody(r =>
+                    {
+                        return File.ReadAllText("./Currency/sampleExchangeDate.json");
+                    })
+                );
+            return $"{server.Urls[0]}/";
+        }
+
+        public CurrencyExchangeRepositoryTest()
+        {
+            _ICurrencyExchangeRepository = new CurrencyExchangeRepository(StubbingExchangeRateAPI());
         }
 
         [Fact]
         public async Task GetCurrencyExchangeRateInfo_WrongBaseCurrency_ReturnsNull()
         {
-            //Arrange
-            _ICurrencyExchangeRepositoryMock
-                .Setup(_ => _.GetCurrencyExchangeRateInfo(new string[] { "2019-12-12" }, "XXX", "NOK"))
-                .ReturnsAsync(null as CurrencyExchangeRateInfo);
-
             // Act
             var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2019-12-12" }, "XXX", "NOK");
 
@@ -69,7 +85,6 @@ namespace ExchangeRate.Domain.Test.Currency
             );
         }
 
-
         [Fact]
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsNotNull()
         {
@@ -83,11 +98,6 @@ namespace ExchangeRate.Domain.Test.Currency
         [Fact]
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsMinMax()
         {
-            //Arrange
-            _ICurrencyExchangeRepositoryMock
-                .Setup(_ => _.GetCurrencyExchangeRateInfo(new string[] { "2019-12-12" }, "SEK", "NOK"))
-                .ReturnsAsync(new CurrencyExchangeRateInfo(new Domain.Currency.ExchangeRate(), new Domain.Currency.ExchangeRate(), 0.1m));
-
             // Act
             var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2019-12-12" }, "SEK", "NOK");
 
@@ -99,11 +109,6 @@ namespace ExchangeRate.Domain.Test.Currency
         [Fact]
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsAverage()
         {
-            //Arrange
-            _ICurrencyExchangeRepositoryMock
-                .Setup(_ => _.GetCurrencyExchangeRateInfo(new string[] { "2019-12-12" }, "SEK", "NOK"))
-                .ReturnsAsync(new CurrencyExchangeRateInfo(null, null, 0.1m));
-
             // Act
             var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2019-12-12" }, "SEK", "NOK");
 

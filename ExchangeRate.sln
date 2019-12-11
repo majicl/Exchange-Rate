@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Domain", "Src\ExchangeRate.Domain\ExchangeRate.Domain.csproj", "{2B05DA45-56DA-4BDB-955F-2899EE93198A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Domain.Test", "Test\ExchangeRate.Domain.Test\ExchangeRate.Domain.Test.csproj", "{9395734A-8603-4290-9FBA-57807E10792C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Test", "Test\ExchangeRate.Domain.Test\ExchangeRate.Test.csproj", "{9395734A-8603-4290-9FBA-57807E10792C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Application", "Src\ExchangeRate.Application\ExchangeRate.Application.csproj", "{05D8B5DB-EAB3-4394-B34F-E9217F7F905B}"
 EndProject

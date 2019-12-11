@@ -6,18 +6,23 @@
 
   <ItemGroup>
     <Folder Include="Currency\" />
-    <Folder Include="Currency\Mocks\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="WireMock.Net" Version="1.0.40" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Src\ExchangeRate.Domain\ExchangeRate.Domain.csproj" />
+    <ProjectReference Include="..\..\Src\ExchangeRate.Infrastructure\ExchangeRate.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Currency\sampleExchangeDate.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
