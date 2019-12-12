@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MediatR;
+using System.IO;
+using System;
 
 namespace ExchangeRate.API
 {
@@ -23,14 +25,32 @@ namespace ExchangeRate.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddTransient<ICurrencyExchangeRepository, CurrencyExchangeRepository>();
             services.AddMediatR(typeof(CurrencyExchangeRateQuery).GetTypeInfo().Assembly);
-            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v0.1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "v0.1",
+                    Title = "Currency Exchange Rate API",
+                    Description = "A Foreign exchange rates API with currency conversion"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v0.1/swagger.json", "Currency Exchange Rate API v0.1");
+                c.RoutePrefix = string.Empty;
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -39,8 +59,6 @@ namespace ExchangeRate.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
