@@ -10,14 +10,14 @@ namespace ExchangeRate.Application.Currency.Queries
 {
     public class CurrencyExchangeRateQuery
     {
-        public class Query : IRequest<ExchangeRateDto>
+        public class Query : IRequest<CurrencyExchangeRateInfoDto>
         {
-            public string[] Dates { get;  set; } 
-            public string BaseCurrency { get;  set; } 
-            public string TargetCurrency { get;  set; } 
+            public string[] Dates { get; set; }
+            public string BaseCurrency { get; set; }
+            public string TargetCurrency { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, ExchangeRateDto>
+        public class Handler : IRequestHandler<Query, CurrencyExchangeRateInfoDto>
         {
             private readonly ICurrencyExchangeRepository _currencyExchangeRepository;
             public Handler(ICurrencyExchangeRepository currencyExchangeRepository)
@@ -25,16 +25,19 @@ namespace ExchangeRate.Application.Currency.Queries
                 _currencyExchangeRepository = currencyExchangeRepository;
             }
 
-            public async Task<ExchangeRateDto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<CurrencyExchangeRateInfoDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var currencyExchangeRateInfo = await _currencyExchangeRepository.GetCurrencyExchangeRateInfo(request.Dates, request.BaseCurrency, request.TargetCurrency);
 
                 if (currencyExchangeRateInfo == null)
-                    throw new RestException(HttpStatusCode.BadRequest, new { });
+                    throw new RestException(HttpStatusCode.BadRequest, new { Message = "No result found with this query" });
 
-                return new ExchangeRateDto
+                // Todo: auto-mapper also ca be used
+                return new CurrencyExchangeRateInfoDto
                 {
-                    
+                    Average = currencyExchangeRateInfo.Average,
+                    Min = new ExchangeRateDto { Date = currencyExchangeRateInfo.Min.Date, Rate = currencyExchangeRateInfo.Min.Rate },
+                    Max = new ExchangeRateDto { Date = currencyExchangeRateInfo.Max.Date, Rate = currencyExchangeRateInfo.Max.Rate }
                 };
             }
         }

@@ -21,9 +21,9 @@ namespace ExchangeRate.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("ExchangeRate")]
-        [ProducesResponseType(typeof(ExchangeRateDto), (int)HttpStatusCode.Created)]
-        public async Task<ExchangeRateDto> ExchangeRate([FromBody]CurrencyExchangeRateQuery.Query query)
+        [HttpPost("ExchangeRate")]
+        [ProducesResponseType(typeof(CurrencyExchangeRateInfoDto), (int)HttpStatusCode.OK)]
+        public async Task<CurrencyExchangeRateInfoDto> ExchangeRate([FromBody]CurrencyExchangeRateQuery.Query query)
         {
             var result = await _mediator.Send(query);
             return result;
