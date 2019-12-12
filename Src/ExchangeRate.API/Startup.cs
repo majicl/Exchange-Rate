@@ -15,6 +15,7 @@ namespace ExchangeRate.API
 {
     public class Startup
     {
+        private const string ExchangeRateAPIUrl = "ExchangeRateAPIUrl";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +28,10 @@ namespace ExchangeRate.API
         {
             services.AddControllers();
             services.AddTransient<ICurrencyExchangeRepository, CurrencyExchangeRepository>();
+            services.AddSingleton<ICurrencyExchangeRepository, CurrencyExchangeRepository>(serviceProvider =>
+            {
+                return new CurrencyExchangeRepository(Configuration[ExchangeRateAPIUrl]);
+            });
             services.AddMediatR(typeof(CurrencyExchangeRateQuery).GetTypeInfo().Assembly);
             services.AddSwaggerGen(c =>
             {

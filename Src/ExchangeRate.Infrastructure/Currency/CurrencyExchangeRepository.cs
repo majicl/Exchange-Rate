@@ -10,9 +10,12 @@ namespace ExchangeRate.Infrastructure.Currency
     public class CurrencyExchangeRepository : ICurrencyExchangeRepository
     {
         private string _baseUrl;
-        public CurrencyExchangeRepository(string baseUrl = "https://api.exchangeratesapi.io/")
+        public CurrencyExchangeRepository(string baseUrl)
         {
             _baseUrl = baseUrl;
+        }
+        public CurrencyExchangeRepository()
+        {
         }
 
         public async Task<CurrencyExchangeRateInfo> GetCurrencyExchangeRateInfo(string[] dates, string baseCurrency, string targetCurrency)
