@@ -1,14 +1,18 @@
 ﻿FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /api
 
-# Copy files
+# Copy files and restoring packages
 COPY ./ ./
-RUN cd ./Src/ExchangeRate.API
-RUN dotnet restore
-RUN dotnet publish -c Release -o out
+RUN dotnet restore ./Src/ExchangeRate.API
+
+# testing
+RUN dotnet build ./Src/ExchangeRate.API
+RUN dotnet test ./Test/ExchangeRate.Test
+
+# publishing
+RUN dotnet publish ./Src/ExchangeRate.API -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-WORKDIR /api
 COPY --from=build /api/out .
 ENTRYPOINT ["dotnet", "ExchangeRate.API.dll"]
