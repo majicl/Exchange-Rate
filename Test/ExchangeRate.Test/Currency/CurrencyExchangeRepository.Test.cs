@@ -157,5 +157,43 @@ namespace ExchangeRate.Domain.Test.Currency
             // Assert
             Assert.Equal(result.Max, new Domain.Currency.ExchangeRate { Date = maxDate, Rate = max });
         }
+
+        [Fact]
+        public async Task GetCurrencyExchangeRateInfo_ValidInputInARange_ReturnsValidMax()
+        {
+            // Act
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK");
+
+            // data comes from sampleExchangeDate.json
+            var max = 0.9850513732m;
+            var maxDate = "2018-01-11";
+            // Assert
+            Assert.Equal(result.Max, new Domain.Currency.ExchangeRate { Date = maxDate, Rate = max });
+        }
+
+        [Fact]
+        public async Task GetCurrencyExchangeRateInfo_ValidInputInARange_ReturnsValidMin()
+        {
+            // Act
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK");
+
+            // data comes from sampleExchangeDate.json
+            var min = 0.982104728m;
+            var minDate = "2018-01-12";
+            // Assert
+            Assert.Equal(result.Min, new Domain.Currency.ExchangeRate { Date = minDate, Rate = min });
+        }
+
+        [Fact]
+        public async Task GetCurrencyExchangeRateInfo_ValidInputInARange_ReturnsValidAverage()
+        {
+            // Act
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK");
+
+            // data comes from sampleExchangeDate.json
+            var avg = (0.982104728m + 0.9850513732m + 0.9830598308m) / 3m;
+            // Assert
+            Assert.Equal(result.Average, avg);
+        }
     }
 }
