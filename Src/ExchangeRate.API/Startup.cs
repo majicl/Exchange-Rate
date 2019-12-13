@@ -53,6 +53,7 @@ namespace ExchangeRate.API
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
+                c.DocumentTitle = "Currency Exchange Rate API Documentation";
                 c.SwaggerEndpoint("/swagger/v0.1/swagger.json", "Currency Exchange Rate API v0.1");
                 c.RoutePrefix = string.Empty;
             });
