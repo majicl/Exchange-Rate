@@ -18,22 +18,76 @@ namespace ExchangeRate.Infrastructure.Currency
         {
         }
 
+        /// <summary>
+        /// This method makes a list of range based on input(list of dates)
+        /// </summary>
+        /// <param name="dates">the list of date.</param>
+        /// <returns>a list of ranges</returns>
+        private List<Tuple<string, string>> MakeRageOfTheDates(IEnumerable<DateTime> dates)
+        {
+            var dateFormat = "yyyy-MM-dd";
+            var range = new List<Tuple<string, string>>();
+            DateTime? start = null;
+            var rangeSize = 0;
+            dates.OrderBy(_ => _).ToList().ForEach(date =>
+            {
+                if (!start.HasValue)
+                {
+                    start = date;
+                    rangeSize = 1;
+                }
+                else if (date.Equals(start.Value.AddDays(rangeSize)))
+                {
+                    rangeSize++;
+                }
+                else
+                {
+                    range.Add(new Tuple<string, string>(start.Value.ToString(dateFormat), start.Value.AddDays(rangeSize - 1).ToString(dateFormat)));
+                    start = date;
+                    rangeSize = 1;
+                }
+            });
+
+            if (start.HasValue)
+                range.Add(new Tuple<string, string>(start.Value.ToString(dateFormat), start.Value.AddDays(rangeSize - 1).ToString(dateFormat)));
+
+            return range;
+        }
+
+        /// <summary>
+        ///  This method calculates Minimum, Maximum and Average of exchange rates based on input values
+        /// </summary>
+        /// <param name="dates">list of dates</param>
+        /// <param name="baseCurrency">source currency like 'SEK'</param>
+        /// <param name="targetCurrency">destination currency like 'NOK'</param>
+        /// <returns>Minimum, Maximum and Average</returns>
         public async Task<CurrencyExchangeRateInfo> GetCurrencyExchangeRateInfo(string[] dates, string baseCurrency, string targetCurrency)
         {
+            // regex for validating dates
             var rgx = new Regex(@"\d{4}-\d{2}-\d{2}");
-            var tasks = dates.Select(date =>
+
+            // validate and convert all the string dates to the DateTime 
+            var listOfDates = dates.Select(date =>
             {
                 if (!rgx.IsMatch(date) || !DateTime.TryParse(date, out DateTime x))
                 {
                     throw new InvalidCastException($"{date} does not match format yyyy-mm-dd");
                 }
 
-                return HttpClientHelper
-                  .Get<ExchangeRatesResponse>($"{_baseUrl}history?start_at={date}&end_at={date}&base={baseCurrency}&symbols={targetCurrency}");
+                return x;
             });
 
+            // make ranges of dates for reducing the API call
+            var ranges = MakeRageOfTheDates(listOfDates);
+
+            // calling the API for all the possible ranges
+            var tasks = ranges.Select(rng => HttpClientHelper
+                  .Get<ExchangeRatesResponse>($"{_baseUrl}history?start_at={rng.Item1}&end_at={rng.Item2}&base={baseCurrency}&symbols={targetCurrency}"));
+
+            // run parallelly
             var infos = await Task.WhenAll(tasks);
 
+            // make the result flat and ready for calculation
             var allRates = infos
                 .SelectMany(_ =>
                 _.rates
