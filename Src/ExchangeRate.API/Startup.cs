@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using MediatR;
 using System.IO;
 using System;
+using FluentValidation.AspNetCore;
+using ExchangeRate.Application.Currency;
 
 namespace ExchangeRate.API
 {
@@ -33,6 +35,7 @@ namespace ExchangeRate.API
                 return new CurrencyExchangeRepository(Configuration[ExchangeRateAPIUrl]);
             });
             services.AddMediatR(typeof(CurrencyExchangeRateQuery).GetTypeInfo().Assembly);
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CurrencyExchangeRateQueryValidator>());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v0.1", new Microsoft.OpenApi.Models.OpenApiInfo

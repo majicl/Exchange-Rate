@@ -32,7 +32,7 @@ namespace ExchangeRate.Application.Currency.Queries
                 if (currencyExchangeRateInfo == null)
                     throw new RestException(HttpStatusCode.BadRequest, new { Message = "No result found with this query" });
 
-                // Todo: auto-mapper also ca be used
+                // Todo: auto-mapper also can be used
                 return new CurrencyExchangeRateInfoDto
                 {
                     Average = currencyExchangeRateInfo.Average,
