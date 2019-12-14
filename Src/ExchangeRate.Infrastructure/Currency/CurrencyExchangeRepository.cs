@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRate.Domain.Currency;
 
@@ -61,7 +62,7 @@ namespace ExchangeRate.Infrastructure.Currency
         /// <param name="baseCurrency">source currency like 'SEK'</param>
         /// <param name="targetCurrency">destination currency like 'NOK'</param>
         /// <returns>Minimum, Maximum and Average</returns>
-        public async Task<CurrencyExchangeRateInfo> GetCurrencyExchangeRateInfo(string[] dates, string baseCurrency, string targetCurrency)
+        public async Task<CurrencyExchangeRateInfo> GetCurrencyExchangeRateInfoAsync(string[] dates, string baseCurrency, string targetCurrency, CancellationToken cancellationToken)
         {
             // regex for validating dates
             var rgx = new Regex(@"\d{4}-\d{2}-\d{2}");
@@ -82,7 +83,7 @@ namespace ExchangeRate.Infrastructure.Currency
 
             // calling the API for all the possible ranges
             var tasks = ranges.Select(rng => HttpClientHelper
-                  .Get<ExchangeRatesResponse>($"{_baseUrl}history?start_at={rng.Item1}&end_at={rng.Item2}&base={baseCurrency}&symbols={targetCurrency}"));
+                  .GetAsync<ExchangeRatesResponse>($"{_baseUrl}history?start_at={rng.Item1}&end_at={rng.Item2}&base={baseCurrency}&symbols={targetCurrency}", cancellationToken));
 
             // run parallelly
             var infos = await Task.WhenAll(tasks);

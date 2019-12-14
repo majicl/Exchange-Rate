@@ -27,7 +27,7 @@ namespace ExchangeRate.Application.Currency.Queries
 
             public async Task<CurrencyExchangeRateInfoDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var currencyExchangeRateInfo = await _currencyExchangeRepository.GetCurrencyExchangeRateInfo(request.Dates, request.BaseCurrency, request.TargetCurrency);
+                var currencyExchangeRateInfo = await _currencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(request.Dates, request.BaseCurrency, request.TargetCurrency, cancellationToken);
 
                 if (currencyExchangeRateInfo == null)
                     throw new RestException(HttpStatusCode.BadRequest, new { Message = "No result found with this query" });

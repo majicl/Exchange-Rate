@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRate.Domain.Currency;
 using ExchangeRate.Infrastructure.Currency;
@@ -43,7 +44,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_WrongBaseCurrency_ReturnsNull()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2019-12-12" }, "XXX", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2019-12-12" }, "XXX", "NOK", CancellationToken.None);
 
             // Assert
             Assert.Null(result);
@@ -53,7 +54,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_WrongTargetCurrency_ReturnsNull()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-09" }, "SEK", "XXX");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-09" }, "SEK", "XXX", CancellationToken.None);
 
             // Assert
             Assert.Null(result);
@@ -63,7 +64,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_EmptyDates_ReturnsNull()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-09" }, "SEK", "XXX");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-09" }, "SEK", "XXX", CancellationToken.None);
 
             // Assert
             Assert.Null(result);
@@ -75,7 +76,7 @@ namespace ExchangeRate.Domain.Test.Currency
             // Act
             // Assert
             await Assert.ThrowsAsync<ArgumentNullException>(
-                () => _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(null, "SEK", "DOK")
+                () => _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(null, "SEK", "DOK", CancellationToken.None)
             );
         }
 
@@ -85,7 +86,7 @@ namespace ExchangeRate.Domain.Test.Currency
             // Act
             // Assert
             await Assert.ThrowsAsync<InvalidCastException>(
-                () => _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-09", "2018/01/09" }, "SEK", "NOK")
+                () => _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-09", "2018/01/09" }, "SEK", "NOK", CancellationToken.None)
             );
         }
 
@@ -93,7 +94,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsNotNull()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-09" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-09" }, "SEK", "NOK", CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
@@ -103,7 +104,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsMinMax()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-09" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-09" }, "SEK", "NOK", CancellationToken.None);
 
             // Assert
             Assert.NotNull(result.Max);
@@ -114,7 +115,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsAverage()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-09" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-09" }, "SEK", "NOK", CancellationToken.None);
 
             // Assert
             Assert.True(result.Average != 0);
@@ -124,7 +125,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsValidAverage()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-22", "2018-01-09", "2018-01-24" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-22", "2018-01-09", "2018-01-24" }, "SEK", "NOK", CancellationToken.None);
 
             // data comes from sampleExchangeDate.json
             var avg = (0.9784726459m + 0.9839960117m + 0.9791706925m) / 3m;
@@ -136,7 +137,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsValidMin()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-22", "2018-01-09", "2018-01-24" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-22", "2018-01-09", "2018-01-24" }, "SEK", "NOK", CancellationToken.None);
 
             // data comes from sampleExchangeDate.json
             var min = 0.9784726459m;
@@ -149,7 +150,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInput_ReturnsValidMax()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-22", "2018-01-09", "2018-01-24" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-22", "2018-01-09", "2018-01-24" }, "SEK", "NOK", CancellationToken.None);
 
             // data comes from sampleExchangeDate.json
             var max = 0.9839960117m;
@@ -162,7 +163,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInputInARange_ReturnsValidMax()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK", CancellationToken.None);
 
             // data comes from sampleExchangeDate.json
             var max = 0.9850513732m;
@@ -175,7 +176,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInputInARange_ReturnsValidMin()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK", CancellationToken.None);
 
             // data comes from sampleExchangeDate.json
             var min = 0.982104728m;
@@ -188,7 +189,7 @@ namespace ExchangeRate.Domain.Test.Currency
         public async Task GetCurrencyExchangeRateInfo_ValidInputInARange_ReturnsValidAverage()
         {
             // Act
-            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfo(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK");
+            var result = await _ICurrencyExchangeRepository.GetCurrencyExchangeRateInfoAsync(new string[] { "2018-01-10", "2018-01-12", "2018-01-11" }, "SEK", "NOK", CancellationToken.None);
 
             // data comes from sampleExchangeDate.json
             var avg = (0.982104728m + 0.9850513732m + 0.9830598308m) / 3m;
