@@ -8,8 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MediatR;
-using System.IO;
-using System;
 using FluentValidation.AspNetCore;
 using ExchangeRate.Application.Currency;
 

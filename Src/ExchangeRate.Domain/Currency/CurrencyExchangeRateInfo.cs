@@ -1,5 +1,4 @@
-﻿using System;
-namespace ExchangeRate.Domain.Currency
+﻿namespace ExchangeRate.Domain.Currency
 {
     public class CurrencyExchangeRateInfo
     {

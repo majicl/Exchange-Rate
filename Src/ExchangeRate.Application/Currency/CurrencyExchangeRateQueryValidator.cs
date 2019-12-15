@@ -1,6 +1,4 @@
-﻿using System;
-using ExchangeRate.Application.Currency.Queries;
-using ExchangeRate.Domain.Currency;
+﻿using ExchangeRate.Application.Currency.Queries;
 using FluentValidation;
 
 namespace ExchangeRate.Application.Currency

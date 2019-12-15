@@ -1,5 +1,4 @@
-﻿using System;
-namespace ExchangeRate.Application.Currency
+﻿namespace ExchangeRate.Application.Currency
 {
     public class ExchangeRateDto
     {
