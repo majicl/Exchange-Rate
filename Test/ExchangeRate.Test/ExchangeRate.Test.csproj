@@ -14,7 +14,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="WireMock.Net" Version="1.0.40" />
+    <PackageReference Include="WireMock.Net" Version="1.0.41" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Src\ExchangeRate.Domain\ExchangeRate.Domain.csproj" />
