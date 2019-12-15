@@ -53,3 +53,7 @@ Open [https://localhost:5001](https://localhost:5001) to view it in the browser.
 ### and run it by:
 
 #### `docker run -d -p 8080:80 --name my-api sambose/exchange-rate-api`
+
+## Architecture and Libraries
+
+### dotnet core 3.0, Clean architecture, CQRS, FluentValidation, Swagger, xUnit, WireMock.Net, docker
