@@ -3,6 +3,7 @@ WORKDIR /api
 
 # Copy files and restoring packages
 COPY ./ ./
+ENV PATH="${PATH}:/root/.dotnet/tools"
 RUN dotnet restore ./Src/ExchangeRate.API
 
 # testing
